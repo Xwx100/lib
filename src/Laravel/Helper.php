@@ -34,7 +34,7 @@ abstract class Helper implements HelperInterface
      */
     public static function response()
     {
-        return static::container()->make('request');
+        return static::container()->make('response');
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class Helper implements HelperInterface
      */
     public static function log()
     {
-        return static::container()->make('request');
+        return static::container()->make('log');
     }
 
     /**
