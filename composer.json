@@ -1,5 +1,5 @@
 {
-    "name": "xu/lib",
+    "name": "xuwx/lib",
     "autoload": {
         "psr-4": {
             "Lib\\": "src/"
@@ -7,8 +7,8 @@
     },
     "authors": [
         {
-            "name": "xu",
-            "email": "xu@qq.com"
+            "name": "xuwx",
+            "email": "793486544@qq.com"
         }
     ],
     "require": {
