@@ -8,19 +8,22 @@
 
 namespace Lib\Laravel;
 
+use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Lib\HelperInterface;
+use Lib\Laravel\ResponseFormat\Index as ResponseFormatIndex;
 use Lib\Laravel\Storage\Index as StorageIndex;
 use Lib\Laravel\Func\Index as FuncIndex;
+use Lib\Laravel\Zipkin\Index as ZipkinIndex;
+use Lib\Laravel\HyperfClient\Index as HyperfClientIndex;
 
 abstract class Helper implements HelperInterface
 {
     /**
-     * @return mixed
-     * @see \Illuminate\Http\Request
+     * @return \Illuminate\Http\Request
      * @date 2022/1/21
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public static function request()
     {
@@ -28,9 +31,8 @@ abstract class Helper implements HelperInterface
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Contracts\Routing\ResponseFactory
      * @date 2022/1/21
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public static function response()
     {
@@ -38,9 +40,26 @@ abstract class Helper implements HelperInterface
     }
 
     /**
+     * @return ResponseFormatIndex
+     * @date 2022/1/22
+     */
+    public static function responseFormat()
+    {
+        return static::singleton(ResponseFormatIndex::class);
+    }
+
+    /**
+     * @return HyperfClientIndex
+     * @date 2022/1/22
+     */
+    public static function hyperfClient()
+    {
+        return static::singleton(HyperfClientIndex::class);
+    }
+
+    /**
      * @return Logger
      * @date 2022/1/21
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public static function log()
     {
@@ -56,13 +75,22 @@ abstract class Helper implements HelperInterface
         return static::singleton(FuncIndex::class);
     }
 
-    public static function singleton($abstract, $concrete = null, $arguments = null)
+    /**
+     * @return ZipkinIndex
+     * @date 2022/1/21
+     */
+    public static function zipkin()
+    {
+        return static::singleton(ZipkinIndex::class);
+    }
+
+    public static function singleton($abstract, $concrete = null, $arguments = [])
     {
         app()->singletonIf($abstract, $concrete);
         return app()->make($abstract, $arguments);
     }
 
-    public static function singletonArgs($abstract, $concrete = null, $arguments = null) {
+    public static function singletonArgs($abstract, $concrete = null, $arguments = []) {
         $newClass = "{$abstract}_" . md5(serialize($arguments));
         return static::singleton($newClass, $concrete ?: $abstract, $arguments);
     }

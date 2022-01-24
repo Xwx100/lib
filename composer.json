@@ -11,8 +11,12 @@
             "email": "793486544@qq.com"
         }
     ],
-    "require": {
-        "laravel/framework": "^7.29",
-        "openzipkin/zipkin": "^3.0"
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Lib\\Laravel\\HelperServiceProvider"
+            ]
+        }
     }
 }

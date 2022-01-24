@@ -26,9 +26,18 @@ class Index
     ];
 
 
+    /**
+     * @return \App\Service\Auc\Auc
+     * @date 2022/1/22
+     */
     public function auc()
     {
         return static::client(self::CLIENT_AUC);
+    }
+
+    public function dingding()
+    {
+
     }
 
 
@@ -62,4 +71,5 @@ class Index
         $clientFactory = new ClientFactory();
         return $clientFactory->create($name, static::PROTOCOL);
     }
+
 }

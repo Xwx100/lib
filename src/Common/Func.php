@@ -50,4 +50,14 @@ trait Func
         }
         return $cond;
     }
+
+    /**
+     * 毫秒整数
+     * @return int
+     * @date 2022/1/24
+     */
+    public function microSeconds()
+    {
+        return (int)(microtime(true) * 1000 * 1000);
+    }
 }

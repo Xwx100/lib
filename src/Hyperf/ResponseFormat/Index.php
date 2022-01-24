@@ -6,7 +6,7 @@
  * @author xu
  */
 
-namespace Lib\Laravel\ResponseFormat;
+namespace Lib\Hyperf\ResponseFormat;
 
 use Lib\Common\ArrayObject;
 use Lib\Laravel\Helper;
