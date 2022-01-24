@@ -14,7 +14,7 @@ use Hyperf\Jet\PathGenerator\PathGenerator;
 use Hyperf\Jet\ProtocolManager;
 use Hyperf\Jet\ServiceManager;
 use Hyperf\Jet\Transporter\StreamSocketTransporter;
-use Hyperf\Jet\DataFormatter\DataFormatter;
+use Lib\Laravel\HyperfClient\DataFormatter;
 
 class Index
 {

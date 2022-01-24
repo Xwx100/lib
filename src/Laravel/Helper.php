@@ -21,6 +21,7 @@ use Lib\Laravel\HyperfClient\Index as HyperfClientIndex;
 
 abstract class Helper implements HelperInterface
 {
+
     /**
      * @return \Illuminate\Http\Request
      * @date 2022/1/21

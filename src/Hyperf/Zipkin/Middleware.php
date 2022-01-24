@@ -15,15 +15,15 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class Middile implements MiddlewareInterface
+class Middleware implements MiddlewareInterface
 {
     use JsonRpc;
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $tracerContext = $request->getAttribute($this->flag());
+        $data = $request->getAttribute('data');
+        $tracerContext = $data[$this->sendFlag()];
         Helper::storageCoData()->set($this->receiveHyperfFlag(), $tracerContext);
-
         return $handler->handle($request);
     }
 }

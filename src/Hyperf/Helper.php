@@ -115,7 +115,7 @@ abstract class Helper implements HelperInterface
         return self::singleton(ContextRpc::class);
     }
 
-    public static function singleton($abstract, $concrete = null)
+    public static function singleton($abstract, $concrete = null, $arguments = null)
     {
         if (!static::container()->has($abstract) && $concrete) {
             static::container()->set($abstract, $concrete);
@@ -123,7 +123,7 @@ abstract class Helper implements HelperInterface
         return static::container()->get($abstract);
     }
 
-    public static function singletonArgs($abstract, $concrete = null)
+    public static function singletonArgs($abstract, $concrete = null, $arguments = null)
     {
         $newClass = "{$abstract}_" . md5(serialize($arguments));
         return static::singleton($newClass, $newClass);

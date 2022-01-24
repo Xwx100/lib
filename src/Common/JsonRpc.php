@@ -15,7 +15,7 @@ trait JsonRpc
      * @return string
      * @date 2022/1/24
      */
-    public function sendFag()
+    public function sendFlag()
     {
         return 'zipkin';
     }

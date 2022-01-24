@@ -53,16 +53,16 @@ class Index
      */
     public $rootSpan = null;
 
-//    const CHILD_SPAN_DEBUG = 'debug';
-//    const CHILD_SPAN_MYSQL = 'mysql';
-//    /**
-//     * @var array
-//     * @date 2022/1/24
-//     */
-//    public $childSpan = [
-//        CHILD_SPAN_DEBUG => null,
-//        CHILD_SPAN_MYSQL => null,
-//    ];
+    const CHILD_SPAN_DEBUG = 'debug';
+    const CHILD_SPAN_MYSQL = 'mysql';
+    /**
+     * @var array
+     * @date 2022/1/24
+     */
+    public $childSpan = [
+        self::CHILD_SPAN_DEBUG => null,
+        self::CHILD_SPAN_MYSQL => null,
+    ];
 
     /**
      * 注册
@@ -117,12 +117,12 @@ class Index
 
     public function logDebug(string $value)
     {
-        return $this->log('debug', $value);
+        return $this->log(self::CHILD_SPAN_DEBUG, $value);
     }
 
     public function logMysql(string $value)
     {
-        return $this->log('mysql', $value);
+        return $this->log(self::CHILD_SPAN_MYSQL, $value);
     }
 
     public function log(string $key, string $value)
@@ -149,13 +149,13 @@ class Index
     }
 
     /**
-     * 固定请求头格式-发送
+     * 固定请求头格式-发送 trace_id => injector => x-b3-traceid => extract => trace_id
      * @return array
      * @date 2022/1/24
      */
     public function headersSend()
     {
-        static $headers = null;
+        static $headers = [];
         if (empty($headers))
         {
             $injector = $this->tracering->getPropagation()->getInjector(new Map());
