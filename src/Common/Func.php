@@ -60,4 +60,24 @@ trait Func
     {
         return (int)(microtime(true) * 1000 * 1000);
     }
+
+    /**
+     * 深拷贝
+     * @param $obj
+     * @return mixed
+     * @date 2022/1/26
+     */
+    public function deepCopy($obj)
+    {
+        return unserialize(serialize($obj));
+    }
+
+    public function isDate($d): bool
+    {
+        if (!$d) {
+            return false;
+        }
+        $arr = date_parse($d);
+        return checkdate($arr['month'] ?? null, $arr['day'] ?? null, $arr['year'] ?? null);
+    }
 }

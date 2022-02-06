@@ -21,10 +21,12 @@ class Middleware
      */
     public function handle($request, \Closure $next)
     {
-        Helper::zipkin()->register();
+        $zipKin = Helper::zipkin();
+        $zipKin->register();
+        $zipKin->rootSpan->tag('request', Helper::func()->sprintf('%s', Helper::request()->input()));
         $response = $next($request);
-        Helper::zipkin()->rootSpan->finish(Helper::func()->microSeconds());
-        Helper::zipkin()->tracer->flush();
+        $zipKin->rootSpan->tag('response', Helper::func()->sprintf('%s', $response));
+        $zipKin->end();
         return $response;
     }
 }

@@ -53,16 +53,16 @@ class Index
      */
     public $rootSpan = null;
 
-    const CHILD_SPAN_DEBUG = 'debug';
-    const CHILD_SPAN_MYSQL = 'mysql';
-    /**
-     * @var array
-     * @date 2022/1/24
-     */
-    public $childSpan = [
-        self::CHILD_SPAN_DEBUG => null,
-        self::CHILD_SPAN_MYSQL => null,
-    ];
+//    const CHILD_SPAN_DEBUG = 'debug';
+//    const CHILD_SPAN_MYSQL = 'mysql';
+//    /**
+//     * @var array
+//     * @date 2022/1/24
+//     */
+//    public $childSpan = [
+//        CHILD_SPAN_DEBUG => null,
+//        CHILD_SPAN_MYSQL => null,
+//    ];
 
     /**
      * 注册
@@ -76,7 +76,7 @@ class Index
         $sampler = BinarySampler::createAsAlwaysSample();
         $builder = TracingBuilder::create();
         $reporter = call_user_func([$this, "registerReporter" . ucfirst(env('LOG_SLS_ALI_REPORT_STYLE'))]);
-        $currentTraceText = new CurrentTraceContext();
+        $currentTraceText = CurrentTraceContext::create();
         $currentTraceText->createScopeAndRetrieveItsCloser(TraceContext::createAsRoot(DefaultSamplingFlags::createAsEmpty()));
 
         $this->tracering = $builder
@@ -96,10 +96,16 @@ class Index
         return $this;
     }
 
+    public function end()
+    {
+        $this->rootSpan->finish(Helper::func()->microSeconds());
+        $this->tracer->flush();
+    }
+
 
     public function registerReporterCurl()
     {
-        return new Http([
+        return new Http(null, [
             'endpoint_url' => env('LOG_SLS_ALI_REPORT_URL'),
             'headers' => [
                 'x-sls-otel-project' => env('LOG_SLS_ALI_PROJECT'),
@@ -117,12 +123,12 @@ class Index
 
     public function logDebug(string $value)
     {
-        return $this->log(self::CHILD_SPAN_DEBUG, $value);
+        return $this->log('debug', $value);
     }
 
     public function logMysql(string $value)
     {
-        return $this->log(self::CHILD_SPAN_MYSQL, $value);
+        return $this->log('mysql', $value);
     }
 
     public function log(string $key, string $value)
@@ -149,7 +155,7 @@ class Index
     }
 
     /**
-     * 固定请求头格式-发送 trace_id => injector => x-b3-traceid => extract => trace_id
+     * 固定请求头格式-发送
      * @return array
      * @date 2022/1/24
      */

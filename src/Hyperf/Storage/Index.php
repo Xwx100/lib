@@ -12,7 +12,9 @@ namespace Lib\Hyperf\Storage;
 use Lib\Common\ArrayObject;
 
 /**
- * 功能：
+ * @property string $request_id 唯一请求ID
+ *
+ * @method $this setRequestId($requestId)
  * @date 2022/1/21
  * @author xu
  */

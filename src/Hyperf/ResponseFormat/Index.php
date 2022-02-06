@@ -9,7 +9,7 @@
 namespace Lib\Hyperf\ResponseFormat;
 
 use Lib\Common\ArrayObject;
-use Lib\Laravel\Helper;
+use Lib\Hyperf\Helper;
 
 
 /**

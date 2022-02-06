@@ -17,6 +17,9 @@
             "providers": [
                 "Lib\\Laravel\\HelperServiceProvider"
             ]
+        },
+        "hyperf": {
+            "config": "Lib\\Hyperf\\ConfigProvider"
         }
     }
 }

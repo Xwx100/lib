@@ -7,13 +7,11 @@ namespace Lib\Laravel\Common;
 
 
 use Hyperf\Utils\Str;
-use X\Helper;
 
 /**
  * 通用型数组转对象
  * Class ArrayObject
  *
- * @package X\Hyperf
  */
 abstract class ArrayObject implements \ArrayAccess
 {

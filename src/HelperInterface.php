@@ -53,6 +53,22 @@ interface HelperInterface
      */
     public static function arr();
 
+
+    /**
+     * 容器-存储
+     * @return mixed
+     * @date 2022/1/20
+     */
+    public static function storage();
+
+
+    /**
+     * 容器-验证器
+     * @return mixed
+     * @date 2022/1/20
+     */
+    public static function validator();
+
     /**
      * 单例
      * @param $abstract
@@ -72,28 +88,6 @@ interface HelperInterface
      * @date 2022/1/21
      */
     public static function singletonArgs($abstract, $concrete = null, $arguments = null);
-
-    /**
-     * 容器-存储(进程变量)
-     * @return mixed
-     * @date 2022/1/20
-     */
-    public static function storage();
-
-    /**
-     * 容器-存储(协程变量)
-     * @return mixed
-     * @date 2022/1/20
-     */
-    public static function storageCo();
-
-
-    /**
-     * 容器-验证器
-     * @return mixed
-     * @date 2022/1/20
-     */
-    public static function validator();
 
     /**
      * 容器

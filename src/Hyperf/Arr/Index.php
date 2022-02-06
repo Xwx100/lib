@@ -8,9 +8,16 @@
 
 namespace Lib\Hyperf\Arr;
 
+use Hyperf\Utils\Arr;
 use Lib\Common\ArrTree;
 
-class Index
+/**
+ * 功能：
+ *
+ * @date 2022/1/25
+ * @author xu
+ */
+class Index extends Arr
 {
     use ArrTree;
 }
