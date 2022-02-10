@@ -8,13 +8,13 @@
 
 namespace Lib\Laravel\Zipkin;
 
+use Lib\Common\JsonRpc;
 use Lib\Laravel\Helper;
 use Zipkin\DefaultTracing;
 use Zipkin\Endpoint;
 use Zipkin\Propagation\CurrentTraceContext;
 use Zipkin\Propagation\DefaultSamplingFlags;
 use Zipkin\Propagation\Map;
-use Zipkin\Propagation\ServerHeaders;
 use Zipkin\Reporters\Http;
 use Zipkin\Samplers\BinarySampler;
 use Zipkin\Span;
@@ -31,6 +31,8 @@ use const Zipkin\Kind\CLIENT;
  */
 class Index
 {
+    use JsonRpc;
+
     /**
      * @var DefaultTracing
      * @date 2022/1/24
@@ -76,7 +78,7 @@ class Index
         $sampler = BinarySampler::createAsAlwaysSample();
         $builder = TracingBuilder::create();
         $reporter = call_user_func([$this, "registerReporter" . ucfirst(env('LOG_SLS_ALI_REPORT_STYLE'))]);
-        $currentTraceText = CurrentTraceContext::create();
+        $currentTraceText = new CurrentTraceContext();
         $currentTraceText->createScopeAndRetrieveItsCloser(TraceContext::createAsRoot(DefaultSamplingFlags::createAsEmpty()));
 
         $this->tracering = $builder
@@ -116,42 +118,25 @@ class Index
         ]);
     }
 
-    public function registerReporterSyslog()
+    public function log(string $name, string $f, $context = [], $users = [], $roles = [], $robots = [])
     {
-        return $reporter = new \Zipkin\Reporters\Log(Helper::log()->getLogger());
-    }
-
-    public function logDebug(string $value)
-    {
-        return $this->log('debug', $value);
-    }
-
-    public function logMysql(string $value)
-    {
-        return $this->log('mysql', $value);
-    }
-
-    public function log(string $key, string $value)
-    {
-        $childRootSpan = $this->childRootSpan($key);
-        $child = $this->tracer->nextSpan($childRootSpan->getContext());
+        $value = Helper::func()->sprintf($f, $context);
+        $child = $this->tracer->nextSpan($this->rootSpan->getContext());
+        $child->setName($name);
         $child->start(Helper::func()->microSeconds());
-        $child->tag($key, $value);
-        return $child;
-    }
-
-    public function childRootSpan($name)
-    {
-        if (!isset($this->childSpan[$name])) {
-            /**
-             * @var Span
-             */
-            $span = $this->tracer->nextSpan();
-            $span->start(Helper::func()->microSeconds());
-            $span->setName($name);
-            $this->childSpan[$name] = $span;
+        $child->tag('msg', $value);
+        if ($users) {
+            $child->tag('notify.users', Helper::func()->sprintf('%s', $users));
         }
-        return $this->childSpan[$name];
+        if ($roles) {
+            $child->tag('notify.roles', Helper::func()->sprintf('%s', $roles));
+        }
+        if ($robots) {
+            $child->tag('notify.robots', Helper::func()->sprintf('%s', $robots));
+        }
+        $child->finish(Helper::func()->microSeconds());
+        $child->flush();
+        return $child;
     }
 
     /**
@@ -162,8 +147,7 @@ class Index
     public function headersSend()
     {
         static $headers = [];
-        if (empty($headers))
-        {
+        if (empty($headers)) {
             $injector = $this->tracering->getPropagation()->getInjector(new Map());
             $injector($this->rootSpan->getContext(), $headers);
         }

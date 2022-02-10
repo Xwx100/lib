@@ -59,15 +59,6 @@ abstract class Helper implements HelperInterface
     }
 
     /**
-     * @return Logger
-     * @date 2022/1/21
-     */
-    public static function log()
-    {
-        return static::container()->make('log');
-    }
-
-    /**
      * @return FuncIndex
      * @date 2022/1/21
      */

@@ -53,6 +53,12 @@ interface HelperInterface
      */
     public static function arr();
 
+    /**
+     * @return mixed
+     * @date 2022/2/10
+     */
+    public static function zipkin();
+
 
     /**
      * 容器-存储

@@ -8,17 +8,19 @@
 
 namespace Lib\Hyperf;
 
+use Lib\Hyperf\Zipkin\ZipkinTracerFactory;
+
 class ConfigProvider
 {
     public function __invoke()
     {
-        return [
+        return array_merge([
             'middlewares' => [
                 'jsonrpc' => [
                     \Lib\Hyperf\Zipkin\Middleware::class,
                     \Hyperf\Tracer\Middleware\TraceMiddleware::class,
                 ]
-            ]
-        ];
+            ],
+        ], ZipkinTracerFactory::config());
     }
 }

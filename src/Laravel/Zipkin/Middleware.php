@@ -8,6 +8,7 @@
 
 namespace Lib\Laravel\Zipkin;
 
+use Illuminate\Http\JsonResponse;
 use Lib\Laravel\Helper;
 
 class Middleware
@@ -23,9 +24,12 @@ class Middleware
     {
         $zipKin = Helper::zipkin();
         $zipKin->register();
-        $zipKin->rootSpan->tag('request', Helper::func()->sprintf('%s', Helper::request()->input()));
+        $zipKin->rootSpan->tag('request.uri', Helper::request()->url());
+        $zipKin->rootSpan->tag('request.params', Helper::func()->sprintf('%s', Helper::request()->input()));
         $response = $next($request);
-        $zipKin->rootSpan->tag('response', Helper::func()->sprintf('%s', $response));
+        if ($response instanceof JsonResponse) {
+            $zipKin->rootSpan->tag('response', Helper::func()->sprintf('%s', $response->getContent()));
+        }
         $zipKin->end();
         return $response;
     }

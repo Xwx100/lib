@@ -27,6 +27,7 @@ use Lib\Hyperf\Arr\Index as ArrIndex;
 use Lib\Hyperf\Storage\Index as StorageIndex;
 use Lib\Hyperf\ResponseFormat\Index as ResponseFormatIndex;
 use Lib\Hyperf\Query\Index as QueryIndex;
+use Lib\Hyperf\Zipkin\Index as ZipkinIndex;
 
 
 abstract class Helper implements HelperInterface,HelperInterfaceHyperf
@@ -87,19 +88,6 @@ abstract class Helper implements HelperInterface,HelperInterfaceHyperf
     }
 
     /**
-     * @return Logger
-     * @date 2022/1/23
-     */
-    public static function log()
-    {
-        /**
-         * @var LoggerFactory $loggerFactory
-         */
-        $loggerFactory = self::singleton(LoggerFactory::class);
-        return $loggerFactory->get();
-    }
-
-    /**
      * @return ValidatorFactory
      * @date 2022/1/23
      */
@@ -134,6 +122,15 @@ abstract class Helper implements HelperInterface,HelperInterfaceHyperf
     public static function queryIndex()
     {
         return self::singleton(QueryIndex::class);
+    }
+
+    /**
+     * @return ZipkinIndex
+     * @date 2022/1/21
+     */
+    public static function zipkin()
+    {
+        return static::singleton(ZipkinIndex::class);
     }
 
     /**

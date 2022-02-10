@@ -80,4 +80,25 @@ trait Func
         $arr = date_parse($d);
         return checkdate($arr['month'] ?? null, $arr['day'] ?? null, $arr['year'] ?? null);
     }
+
+    /**
+     * @param $format
+     * @param ...$context
+     * @return string
+     * @date 2022/2/10
+     */
+    public function sprintf($format, ...$context)
+    {
+        foreach ($context as &$ctx) {
+            if (is_scalar($ctx)) {
+                continue;
+            }
+            if (is_object($ctx) && method_exists($ctx, 'toArray'))
+            {
+                $ctx = $ctx->toArray();
+            }
+            $ctx = json_encode($ctx, JSON_UNESCAPED_UNICODE);
+        }
+        return sprintf($format, ...$context);
+    }
 }
