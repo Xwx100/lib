@@ -154,6 +154,10 @@ class Query
         if (empty($info)) {
             return $this->query;
         }
+        // 终止
+        if (!empty($info['stop'])) {
+            return $this->query;
+        }
         $page = intval($info['page'] ?? 1);
         $pageSize = intval($info['page_size'] ?? 30);
         return $this->query->paginate($pageSize, ['*'], 'page', $page);

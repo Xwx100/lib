@@ -20,9 +20,17 @@ class Index
 {
     const PROTOCOL = 'jsonrpc';
     const CLIENT_AUC = 'AucService';
+    const CLIENT_GAO_DE = 'GaoDeService';
+    const CLIENT_MINI_WEIXIN = 'MiniWeixinService';
+    const CLIENT_FILE = 'FileService';
+    const CLIENT_HOUSE = 'HouseService';
 
     public static $services = [
-        self::CLIENT_AUC => ['host' => 'php', 'port' => 9301]
+        self::CLIENT_AUC => ['host' => 'php', 'port' => 9301],
+        self::CLIENT_GAO_DE => ['host' => 'php', 'port' => 9301],
+        self::CLIENT_MINI_WEIXIN => ['host' => 'php', 'port' => 9301],
+        self::CLIENT_HOUSE => ['host' => 'php', 'port' => 9301],
+        self::CLIENT_FILE => ['host' => 'php', 'port' => 9301]
     ];
 
 
@@ -35,11 +43,25 @@ class Index
         return static::client(self::CLIENT_AUC);
     }
 
-    public function dingding()
+    public function house()
     {
-
+        return static::client(self::CLIENT_HOUSE);
     }
 
+    public function gaoDe()
+    {
+        return static::client(self::CLIENT_GAO_DE);
+    }
+
+    public function miniWeixin()
+    {
+        return static::client(self::CLIENT_MINI_WEIXIN);
+    }
+
+    public function file()
+    {
+        return static::client(self::CLIENT_FILE);
+    }
 
     public function __construct()
     {

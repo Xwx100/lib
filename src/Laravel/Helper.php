@@ -8,10 +8,12 @@
 
 namespace Lib\Laravel;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Lib\HelperInterface;
 use Lib\Laravel\ResponseFormat\Index as ResponseFormatIndex;
 use Lib\Laravel\Storage\Index as StorageIndex;

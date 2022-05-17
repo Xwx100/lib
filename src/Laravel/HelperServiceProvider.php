@@ -9,7 +9,11 @@
 namespace Lib\Laravel;
 
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use League\Flysystem\Filesystem;
+use Lib\Laravel\File\BosAdapterFactory;
 use Lib\Laravel\Zipkin\Middleware;
 
 class HelperServiceProvider extends ServiceProvider
@@ -26,8 +30,10 @@ class HelperServiceProvider extends ServiceProvider
          */
         $this->app->make(Kernel::class)->prependMiddleware(Middleware::class);
         /**
-         * 配置唯一请求ID
+         * 新增bos配置
          */
-        Helper::storage()->setRequestId(Helper::zipkin()->tracerId);
+        Storage::extend('bos', function ($app, $config) {
+            return (new BosAdapterFactory())->make($config);
+        });
     }
 }

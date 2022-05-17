@@ -10,6 +10,8 @@ namespace Lib\Common;
 
 trait Func
 {
+    use Password;
+
     /**
      * @param bool $cond
      * @param $msg

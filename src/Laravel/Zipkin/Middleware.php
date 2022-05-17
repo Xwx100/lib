@@ -24,6 +24,7 @@ class Middleware
     {
         $zipKin = Helper::zipkin();
         $zipKin->register();
+        Helper::storage()->setRequestId($zipKin->tracerId);
         $zipKin->rootSpan->tag('request.uri', Helper::request()->url());
         $zipKin->rootSpan->tag('request.params', Helper::func()->sprintf('%s', Helper::request()->input()));
         $response = $next($request);

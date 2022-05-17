@@ -8,6 +8,9 @@
 
 namespace Lib\Hyperf;
 
+use GuzzleHttp\Client;
+use Hyperf\Filesystem\FilesystemFactory;
+use Hyperf\Guzzle\ClientFactory;
 use Hyperf\Logger\Logger;
 use Hyperf\Logger\LoggerFactory;
 use Hyperf\Utils\ApplicationContext;
@@ -49,6 +52,16 @@ abstract class Helper implements HelperInterface,HelperInterfaceHyperf
     public static function collection()
     {
         return self::singleton(Collection::class);
+    }
+
+    /**
+     * @return Client
+     * @date 2022/3/13
+     */
+    public static function http(array $options = [])
+    {
+        $clientFactory = self::singleton(ClientFactory::class);
+        return $clientFactory->create($options);
     }
 
     /**
