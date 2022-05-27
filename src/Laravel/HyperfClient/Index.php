@@ -14,8 +14,15 @@ use Hyperf\Jet\PathGenerator\PathGenerator;
 use Hyperf\Jet\ProtocolManager;
 use Hyperf\Jet\ServiceManager;
 use Hyperf\Jet\Transporter\StreamSocketTransporter;
+use Lib\Laravel\Helper;
 use Lib\Laravel\HyperfClient\DataFormatter;
 
+/**
+ * 优先读取 env 配置
+ * HYPERF_MICRO_*_*: 单独配置
+ * HYPERF_MICRO_*：全局配置
+ * 当前文件配置（host可取hosts文件配置）
+ */
 class Index
 {
     const PROTOCOL = 'jsonrpc';
@@ -82,7 +89,7 @@ class Index
             // 绑定 CalculatorService 与 jsonrpc 协议，同时设定静态的节点信息
             ServiceManager::register($name, static::PROTOCOL, [
                 ServiceManager::NODES => [
-                    [$host = $service['host'], $port = $service['port']],
+                    $this->getConfig($name)
                 ],
             ]);
         }
@@ -92,6 +99,27 @@ class Index
     {
         $clientFactory = new ClientFactory();
         return $clientFactory->create($name, static::PROTOCOL);
+    }
+
+    /**
+     * 优先读取 env 配置
+     * HYPERF_MICRO_*_*: 单独配置
+     * HYPERF_MICRO_*：全局配置
+     * 当前文件配置（host可取hosts文件配置）
+     */
+    public function getConfig($name = '') {
+        $service = [];
+        if ($name) {
+            $service = static::$services[$name];
+        }
+        return [
+            env(Helper::func()->sprintf('HYPERF_MICRO_HOST_%s', $name))
+                ?: env('HYPERF_MICRO_HOST')
+                ?: $service['host'],
+            env(Helper::func()->sprintf('HYPERF_MICRO_PORT_%s', $name))
+                ?: env('HYPERF_MICRO_PORT')
+                ?: $service['port']
+        ];
     }
 
 }

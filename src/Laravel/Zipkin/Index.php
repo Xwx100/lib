@@ -10,6 +10,7 @@ namespace Lib\Laravel\Zipkin;
 
 use Lib\Common\JsonRpc;
 use Lib\Laravel\Helper;
+use Psr\Log\LoggerInterface;
 use Zipkin\DefaultTracing;
 use Zipkin\Endpoint;
 use Zipkin\Propagation\CurrentTraceContext;
@@ -21,6 +22,9 @@ use Zipkin\Span;
 use Zipkin\Tracer;
 use Zipkin\TracingBuilder;
 use Zipkin\Propagation\TraceContext;
+
+
+
 use const Zipkin\Kind\CLIENT;
 
 /**
@@ -107,7 +111,7 @@ class Index
 
     public function registerReporterCurl()
     {
-        return new Http(null, [
+        return new Http([
             'endpoint_url' => env('LOG_SLS_ALI_REPORT_URL'),
             'headers' => [
                 'x-sls-otel-project' => env('LOG_SLS_ALI_PROJECT'),
@@ -115,7 +119,12 @@ class Index
                 'x-sls-otel-ak-id' => env('LOG_SLS_ALI_AK_ID'),
                 'x-sls-otel-ak-secret' => env('LOG_SLS_ALI_AK_SECRET'),
             ]
-        ]);
+        ], null);
+    }
+
+    public function registerReporterLaravel()
+    {
+        return Helper::singleton(Logger::class);
     }
 
     public function log(string $name, string $f, $context = [], $users = [], $roles = [], $robots = [])

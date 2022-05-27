@@ -29,6 +29,7 @@ class HelperServiceProvider extends ServiceProvider
          * 中间件-zipkin + 配置唯一请求ID
          */
         $this->app->make(Kernel::class)->prependMiddleware(Middleware::class);
+        $this->app->bindIf(SpanSerializer::class, JsonV2Serializer::class);
         /**
          * 新增bos配置
          */
